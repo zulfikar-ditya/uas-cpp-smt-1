@@ -390,6 +390,18 @@ void viewRackContents() {
     }
 }
 
+void printShipmentNote(int index) {
+    cout << "\n====== SHIPMENT NOTE ======\n";
+    cout << "Shipment ID: " << shipmentIds[index] << endl;
+    cout << "Date: " << shipmentDates[index] << endl;
+    cout << "\nQuantities:\n";
+    cout << "Grade A: " << shipmentGradeA[index] << " eggs\n";
+    cout << "Grade B: " << shipmentGradeB[index] << " eggs\n";
+    cout << "Grade C: " << shipmentGradeC[index] << " eggs\n";
+    cout << "Total: " << (shipmentGradeA[index] + shipmentGradeB[index] + shipmentGradeC[index]) << " eggs\n";
+    cout << "========================\n";
+}
+
 void prepareShipment() {
     if (shipmentCount >= MAX_SHIPMENT) {
         cout << "Shipment record is full.\n";
@@ -413,17 +425,6 @@ void prepareShipment() {
     shipmentCount++;
 }
 
-void printShipmentNote(int index) {
-    cout << "\n====== SHIPMENT NOTE ======\n";
-    cout << "Shipment ID: " << shipmentIds[index] << endl;
-    cout << "Date: " << shipmentDates[index] << endl;
-    cout << "\nQuantities:\n";
-    cout << "Grade A: " << shipmentGradeA[index] << " eggs\n";
-    cout << "Grade B: " << shipmentGradeB[index] << " eggs\n";
-    cout << "Grade C: " << shipmentGradeC[index] << " eggs\n";
-    cout << "Total: " << (shipmentGradeA[index] + shipmentGradeB[index] + shipmentGradeC[index]) << " eggs\n";
-    cout << "========================\n";
-}
 
 int handleStaff(void) {
 
