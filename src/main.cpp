@@ -6,7 +6,7 @@ using namespace std;
 
 // ================================================= AUTH
 bool authFunction(string username, string password, string type,
-  char usernames[][10], char passwords[][10], int size) {
+                  char usernames[][10], char passwords[][10], int size) {
   for (int i = 0; i < size; i++) {
     if (username == usernames[i] && password == passwords[i]) {
       return true;
@@ -15,6 +15,8 @@ bool authFunction(string username, string password, string type,
 
   return false;
 }
+
+void printError(string message) { cout << "Error: " << message << endl; }
 // ================================================= AUTH
 
 // ================================================= OWNER
@@ -107,12 +109,12 @@ int handleOwner(void) {
         sizeof(ownerUsername) / sizeof(ownerUsername[0]));
 
     if (!isLoginValid) {
-      cout << "Invalid username or password. Please try again.\n";
+      printError("Invalid username or password.");
     }
 
     loginAttempt++;
     if (loginAttempt >= 3) {
-      cout << "Too many login attempts. Exiting...\n";
+      printError("Too many login attempts. Exiting...");
       return 0;
     }
 
@@ -296,135 +298,137 @@ int shipmentCount = 0;
 
 // Add these functions before handleStaff
 void receiveEggs() {
-    if (receivingCount >= MAX_RECEIVING) {
-        cout << "Receiving record is full.\n";
-        return;
-    }
+  if (receivingCount >= MAX_RECEIVING) {
+    cout << "Receiving record is full.\n";
+    return;
+  }
 
-    cout << "Enter Supplier ID: ";
-    cin >> receivingSupplierIds[receivingCount];
-    cout << "Enter Total Quantity: ";
-    cin >> receivingQuantities[receivingCount];
-    cout << "Enter Receive Date (DD/MM/YYYY): ";
-    cin >> receivingDates[receivingCount];
+  cout << "Enter Supplier ID: ";
+  cin >> receivingSupplierIds[receivingCount];
+  cout << "Enter Total Quantity: ";
+  cin >> receivingQuantities[receivingCount];
+  cout << "Enter Receive Date (DD/MM/YYYY): ";
+  cin >> receivingDates[receivingCount];
 
-    totalStock += receivingQuantities[receivingCount];
-    receivingCount++;
-    cout << "Eggs received successfully.\n";
+  totalStock += receivingQuantities[receivingCount];
+  receivingCount++;
+  cout << "Eggs received successfully.\n";
 }
 
 void viewTotalStock() {
-    cout << "Total available stock: " << totalStock << " eggs\n";
+  cout << "Total available stock: " << totalStock << " eggs\n";
 }
 
 void inputSorting() {
-    if (sortingCount >= MAX_SORTING) {
-        cout << "Sorting record is full.\n";
-        return;
-    }
+  if (sortingCount >= MAX_SORTING) {
+    cout << "Sorting record is full.\n";
+    return;
+  }
 
-    cout << "Enter Batch ID: ";
-    cin >> sortingBatchIds[sortingCount];
-    cout << "Enter quantity for Grade A: ";
-    cin >> sortingGradeA[sortingCount];
-    cout << "Enter quantity for Grade B: ";
-    cin >> sortingGradeB[sortingCount];
-    cout << "Enter quantity for Grade C: ";
-    cin >> sortingGradeC[sortingCount];
+  cout << "Enter Batch ID: ";
+  cin >> sortingBatchIds[sortingCount];
+  cout << "Enter quantity for Grade A: ";
+  cin >> sortingGradeA[sortingCount];
+  cout << "Enter quantity for Grade B: ";
+  cin >> sortingGradeB[sortingCount];
+  cout << "Enter quantity for Grade C: ";
+  cin >> sortingGradeC[sortingCount];
 
-    sortingCount++;
-    cout << "Sorting results recorded successfully.\n";
+  sortingCount++;
+  cout << "Sorting results recorded successfully.\n";
 }
 
 void showGradingGuide() {
-    cout << "\nEgg Grading Guide:\n";
-    cout << "Grade A: Clean, perfect shape, weight 65-70g\n";
-    cout << "Grade B: Slightly imperfect shape, weight 60-65g\n";
-    cout << "Grade C: Irregular shape, weight below 60g\n";
+  cout << "\nEgg Grading Guide:\n";
+  cout << "Grade A: Clean, perfect shape, weight 65-70g\n";
+  cout << "Grade B: Slightly imperfect shape, weight 60-65g\n";
+  cout << "Grade C: Irregular shape, weight below 60g\n";
 }
 
 void recordBatchLocation() {
-    if (storageCount >= MAX_STORAGE) {
-        cout << "Storage record is full.\n";
-        return;
-    }
+  if (storageCount >= MAX_STORAGE) {
+    cout << "Storage record is full.\n";
+    return;
+  }
 
-    cout << "Enter Batch ID: ";
-    cin >> storageBatchIds[storageCount];
+  cout << "Enter Batch ID: ";
+  cin >> storageBatchIds[storageCount];
 
-    int rackNum;
-    cout << "Enter Rack Number (1-" << MAX_RACKS << "): ";
-    cin >> rackNum;
+  int rackNum;
+  cout << "Enter Rack Number (1-" << MAX_RACKS << "): ";
+  cin >> rackNum;
 
-    if (rackNum < 1 || rackNum > MAX_RACKS) {
-        cout << "Invalid rack number.\n";
-        return;
-    }
+  if (rackNum < 1 || rackNum > MAX_RACKS) {
+    cout << "Invalid rack number.\n";
+    return;
+  }
 
-    storageRackNumbers[storageCount] = rackNum;
+  storageRackNumbers[storageCount] = rackNum;
 
-    int gradeA, gradeB, gradeC;
-    cout << "Enter quantity for Grade A: ";
-    cin >> gradeA;
-    cout << "Enter quantity for Grade B: ";
-    cin >> gradeB;
-    cout << "Enter quantity for Grade C: ";
-    cin >> gradeC;
+  int gradeA, gradeB, gradeC;
+  cout << "Enter quantity for Grade A: ";
+  cin >> gradeA;
+  cout << "Enter quantity for Grade B: ";
+  cin >> gradeB;
+  cout << "Enter quantity for Grade C: ";
+  cin >> gradeC;
 
-    rackGradeA[rackNum-1] += gradeA;
-    rackGradeB[rackNum-1] += gradeB;
-    rackGradeC[rackNum-1] += gradeC;
+  rackGradeA[rackNum - 1] += gradeA;
+  rackGradeB[rackNum - 1] += gradeB;
+  rackGradeC[rackNum - 1] += gradeC;
 
-    storageCount++;
-    cout << "Batch location recorded successfully.\n";
+  storageCount++;
+  cout << "Batch location recorded successfully.\n";
 }
 
 void viewRackContents() {
-    cout << "\nRack Contents:\n";
-    for (int i = 0; i < MAX_RACKS; i++) {
-        cout << "Rack " << (i+1) << ":\n";
-        cout << "  Grade A: " << rackGradeA[i] << " eggs\n";
-        cout << "  Grade B: " << rackGradeB[i] << " eggs\n";
-        cout << "  Grade C: " << rackGradeC[i] << " eggs\n";
-        cout << "------------------------\n";
-    }
+  cout << "\nRack Contents:\n";
+  for (int i = 0; i < MAX_RACKS; i++) {
+    cout << "Rack " << (i + 1) << ":\n";
+    cout << "  Grade A: " << rackGradeA[i] << " eggs\n";
+    cout << "  Grade B: " << rackGradeB[i] << " eggs\n";
+    cout << "  Grade C: " << rackGradeC[i] << " eggs\n";
+    cout << "------------------------\n";
+  }
 }
 
 void printShipmentNote(int index) {
-    cout << "\n====== SHIPMENT NOTE ======\n";
-    cout << "Shipment ID: " << shipmentIds[index] << endl;
-    cout << "Date: " << shipmentDates[index] << endl;
-    cout << "\nQuantities:\n";
-    cout << "Grade A: " << shipmentGradeA[index] << " eggs\n";
-    cout << "Grade B: " << shipmentGradeB[index] << " eggs\n";
-    cout << "Grade C: " << shipmentGradeC[index] << " eggs\n";
-    cout << "Total: " << (shipmentGradeA[index] + shipmentGradeB[index] + shipmentGradeC[index]) << " eggs\n";
-    cout << "========================\n";
+  cout << "\n====== SHIPMENT NOTE ======\n";
+  cout << "Shipment ID: " << shipmentIds[index] << endl;
+  cout << "Date: " << shipmentDates[index] << endl;
+  cout << "\nQuantities:\n";
+  cout << "Grade A: " << shipmentGradeA[index] << " eggs\n";
+  cout << "Grade B: " << shipmentGradeB[index] << " eggs\n";
+  cout << "Grade C: " << shipmentGradeC[index] << " eggs\n";
+  cout << "Total: "
+       << (shipmentGradeA[index] + shipmentGradeB[index] +
+           shipmentGradeC[index])
+       << " eggs\n";
+  cout << "========================\n";
 }
 
 void prepareShipment() {
-    if (shipmentCount >= MAX_SHIPMENT) {
-        cout << "Shipment record is full.\n";
-        return;
-    }
+  if (shipmentCount >= MAX_SHIPMENT) {
+    cout << "Shipment record is full.\n";
+    return;
+  }
 
-    cout << "Enter Shipment ID: ";
-    cin >> shipmentIds[shipmentCount];
+  cout << "Enter Shipment ID: ";
+  cin >> shipmentIds[shipmentCount];
 
-    cout << "Enter Grade A quantity: ";
-    cin >> shipmentGradeA[shipmentCount];
-    cout << "Enter Grade B quantity: ";
-    cin >> shipmentGradeB[shipmentCount];
-    cout << "Enter Grade C quantity: ";
-    cin >> shipmentGradeC[shipmentCount];
+  cout << "Enter Grade A quantity: ";
+  cin >> shipmentGradeA[shipmentCount];
+  cout << "Enter Grade B quantity: ";
+  cin >> shipmentGradeB[shipmentCount];
+  cout << "Enter Grade C quantity: ";
+  cin >> shipmentGradeC[shipmentCount];
 
-    cout << "Enter Shipment Date (DD/MM/YYYY): ";
-    cin >> shipmentDates[shipmentCount];
+  cout << "Enter Shipment Date (DD/MM/YYYY): ";
+  cin >> shipmentDates[shipmentCount];
 
-    printShipmentNote(shipmentCount);
-    shipmentCount++;
+  printShipmentNote(shipmentCount);
+  shipmentCount++;
 }
-
 
 int handleStaff(void) {
 
@@ -455,12 +459,12 @@ int handleStaff(void) {
         sizeof(staffUsername) / sizeof(staffUsername[0]));
 
     if (!isLoginValid) {
-      cout << "Invalid username or password. Please try again.\n";
+      printError("Invalid username or password.");
     }
 
     loginAttempt++;
     if (loginAttempt >= 3) {
-      cout << "Too many login attempts. Exiting...\n";
+      printError("Too many login attempts. Exiting...");
       return 0;
     }
 
@@ -538,28 +542,28 @@ int handleStaff(void) {
     }
 
     if (menuChoice == 2) {
-        int storageChoice;
-        do {
-            cout << "\nStorage Operation Menu:\n";
-            cout << "1. Record Batch Location\n";
-            cout << "2. View Rack Contents\n";
-            cout << "3. Prepare Shipment\n";
-            cout << "4. Back to Staff Menu\n";
-            cout << "Enter your choice: ";
-            cin >> storageChoice;
+      int storageChoice;
+      do {
+        cout << "\nStorage Operation Menu:\n";
+        cout << "1. Record Batch Location\n";
+        cout << "2. View Rack Contents\n";
+        cout << "3. Prepare Shipment\n";
+        cout << "4. Back to Staff Menu\n";
+        cout << "Enter your choice: ";
+        cin >> storageChoice;
 
-            if (storageChoice == 1) {
-                recordBatchLocation();
-            } else if (storageChoice == 2) {
-                viewRackContents();
-            } else if (storageChoice == 3) {
-                prepareShipment();
-            } else if (storageChoice == 4) {
-                break;
-            } else {
-                cout << "Invalid choice. Please try again.\n";
-            }
-        } while (true);
+        if (storageChoice == 1) {
+          recordBatchLocation();
+        } else if (storageChoice == 2) {
+          viewRackContents();
+        } else if (storageChoice == 3) {
+          prepareShipment();
+        } else if (storageChoice == 4) {
+          break;
+        } else {
+          cout << "Invalid choice. Please try again.\n";
+        }
+      } while (true);
     }
 
   } while (menuChoice != 3);
