@@ -6,7 +6,7 @@ using namespace std;
 
 // ================================================= AUTH
 bool authFunction(string username, string password, string type,
-                  char usernames[][10], char passwords[][10], int size) {
+  char usernames[][10], char passwords[][10], int size) {
   for (int i = 0; i < size; i++) {
     if (username == usernames[i] && password == passwords[i]) {
       return true;
