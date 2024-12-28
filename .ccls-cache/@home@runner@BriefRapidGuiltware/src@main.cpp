@@ -1,28 +1,17 @@
+#include <ctime>
 #include <iostream>
 #include <main.h>
 #include <util.h>
 
 using namespace std;
 
-// ================================================= AUTH
-bool authFunction(string username, string password, string type,
-                  char usernames[][10], char passwords[][10], int size) {
-  for (int i = 0; i < size; i++) {
-    if (username == usernames[i] && password == passwords[i]) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-void printError(string message) { cout << "Error: " << message << endl; }
-// ================================================= AUTH
-
-// ================================================= OWNER
-
 const int MAX_SUPPLIERS = 100;
 const int MAX_DISTRIBUTIONS = 100;
+const int MAX_OWNERS = 10;
+const int MAX_STAFF = 10;
+
+string ownerLastLoginTimes[MAX_OWNERS];
+string staffLastLoginTimes[MAX_OWNERS];
 
 int supplierIds[MAX_SUPPLIERS];
 string supplierNames[MAX_SUPPLIERS];
@@ -34,6 +23,34 @@ int distributionQuantities[MAX_DISTRIBUTIONS];
 string distributionDestinations[MAX_DISTRIBUTIONS];
 int distributionCount = 0;
 
+string getCurrentTime() {
+  time_t now = time(0);
+  char buffer[80];
+  strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", localtime(&now));
+  return string(buffer);
+}
+
+// ================================================= AUTH
+bool authFunction(string username, string password, string type,
+                  char usernames[][10], char passwords[][10], int size) {
+  for (int i = 0; i < size; i++) {
+    if (username == usernames[i] && password == passwords[i]) {
+      if (type == "owner") {
+        ownerLastLoginTimes[i] = getCurrentTime(); // Add this line
+      } else if (type == "staff") {
+        staffLastLoginTimes[i] = getCurrentTime(); // Add this line
+      }
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void printError(string message) { cout << "Error: " << message << endl; }
+// ================================================= AUTH
+
+// ================================================= OWNER
 void addSupplier() {
   if (supplierCount >= MAX_SUPPLIERS) {
     cout << "Supplier list is full.\n";
@@ -130,6 +147,7 @@ int handleOwner(void) {
     cout << "1. Quality Control\n";
     cout << "2. Supply Management\n";
     cout << "3. Exit\n";
+    cout << "4. Last Login Times\n";
     cout << "Enter your choice: ";
     cin >> menuChoice;
 
@@ -241,6 +259,15 @@ int handleOwner(void) {
           cout << "Invalid choice. Please try again.\n";
         }
       } while (true);
+    }
+
+    if (menuChoice == 4) {
+      cout << "\nLast Login Times:\n";
+      for (int i = 0; i < sizeof(ownerUsername) / sizeof(ownerUsername[0]);
+           i++) {
+        cout << "Username: " << ownerUsername[i]
+             << ", Last Login: " << ownerLastLoginTimes[i] << endl;
+      }
     }
 
   } while (menuChoice != 3);
@@ -480,6 +507,7 @@ int handleStaff(void) {
     cout << "1. Receiving Management\n";
     cout << "2. Storage Operation\n";
     cout << "3. Exit\n";
+    cout << "4. Last Login Times\n";
     cout << "Enter your choice: ";
     cin >> menuChoice;
 
@@ -564,6 +592,15 @@ int handleStaff(void) {
           cout << "Invalid choice. Please try again.\n";
         }
       } while (true);
+    }
+
+    if (menuChoice == 4) {
+      cout << "\nLast Login Times:\n";
+      for (int i = 0; i < sizeof(staffUsername) / sizeof(staffUsername[0]);
+           i++) {
+        cout << "Username: " << staffUsername[i]
+             << ", Last Login: " << staffLastLoginTimes[i] << endl;
+      }
     }
 
   } while (menuChoice != 3);
