@@ -48,20 +48,68 @@ bool authFunction(string username, string password, string type,
 }
 
 void printError(string message) { cout << "Error: " << message << endl; }
+
+
+// new added function for viewSupplierWithMinAmount() and viewSupplierWithMaxAmount()
+// =================================================================================
+bool validateSupplierId(int id) {
+  return id > 0;
+}
+
+int findMaxOrMinSupplier(bool isMax) {
+    if (supplierCount == 0) {
+        return -1;
+    }
+    int targetIndex = 0;
+    for (int i = 1; i < supplierCount; i++) {
+        if (isMax) {
+            if (supplierSupplyAmounts[i] > supplierSupplyAmounts[targetIndex]) {
+                targetIndex = i;
+            }
+        } else {
+            if (supplierSupplyAmounts[i] < supplierSupplyAmounts[targetIndex]) {
+                targetIndex = i;
+            }
+        }
+    }
+    return targetIndex;
+}
+// =================================================================================
+
+
+
+
 // ================================================= AUTH
 
 // ================================================= OWNER
+
+
+
+
 void addSupplier() {
+  // Cek apakah daftar supplier sudah penuh
   if (supplierCount >= MAX_SUPPLIERS) {
     cout << "Supplier list is full.\n";
     return;
   }
+
+  // input pengguna memasukkan Supplier ID
   cout << "Enter Supplier ID: ";
   cin >> supplierIds[supplierCount];
+  
+
+  // Validasi Supplier ID jika lebih kecil dari 0
+  if (!validateSupplierId(supplierIds[supplierCount])) {
+    cout << "Invalid Supplier ID. ID must be positive.\n";
+    return;
+  }
+  // input pengguna memasukkan nama dan jumlah pasokan
   cout << "Enter Supplier Name: ";
   cin >> supplierNames[supplierCount];
   cout << "Enter Supply Amount: ";
   cin >> supplierSupplyAmounts[supplierCount];
+
+  // Tambahkan supplierCount jika semua data valid
   supplierCount++;
   cout << "Supplier added successfully.\n";
 }
@@ -72,6 +120,37 @@ void viewSupplierHistory() {
          << ", Supply Amount: " << supplierSupplyAmounts[i] << endl;
   }
 }
+
+
+// New added function for add supply
+ // =================================================================================
+void viewSupplierWithMaxAmount() {
+    int maxIndex = findMaxOrMinSupplier(true);
+    if (maxIndex == -1) {
+        cout << "No suppliers available.\n";
+        return;
+    }
+    cout << "Supplier with the largest supply amount:\n";
+    cout << "ID: " << supplierIds[maxIndex] << ", Name: " << supplierNames[maxIndex]
+         << ", Supply Amount: " << supplierSupplyAmounts[maxIndex] << endl;
+}
+
+
+
+void viewSupplierWithMinAmount() {
+    int minIndex = findMaxOrMinSupplier(false);
+    if (minIndex == -1) {
+        cout << "No suppliers available.\n";
+        return;
+    }
+    cout << "Supplier with the smallest supply amount:\n";
+    cout << "ID: " << supplierIds[minIndex] << ", Name: " << supplierNames[minIndex]
+         << ", Supply Amount: " << supplierSupplyAmounts[minIndex] << endl;
+}
+ // =================================================================================
+
+
+
 
 void addDistribution() {
   if (distributionCount >= MAX_DISTRIBUTIONS) {
@@ -213,25 +292,35 @@ int handleOwner(void) {
         cout << "Enter your choice: ";
         cin >> supplyChoice;
 
-        if (supplyChoice == 1) {
-          int supplierChoice;
-          do {
-            cout << "\nSupplier Control Menu:\n";
-            cout << "1. Add Supplier\n";
-            cout << "2. View Supplier History\n";
-            cout << "3. Back to Supply Management Menu\n";
-            cout << "Enter your choice: ";
-            cin >> supplierChoice;
 
-            if (supplierChoice == 1) {
-              addSupplier();
-            } else if (supplierChoice == 2) {
-              viewSupplierHistory();
-            } else if (supplierChoice == 3) {
-              break;
-            } else {
-              cout << "Invalid choice. Please try again.\n";
-            }
+
+// New Modified Logic for AddSupply
+ // =================================================================================
+       if (supplyChoice == 1) {
+    int supplierChoice;
+    do {
+        cout << "\nSupplier Control Menu:\n";
+        cout << "1. Add Supplier\n";
+        cout << "2. View Supplier History\n";
+        cout << "3. View Supplier with Max Amount\n";
+        cout << "4. View Supplier with Min Amount\n";
+        cout << "5. Back to Supply Management Menu\n";
+        cout << "Enter your choice: ";
+        cin >> supplierChoice;
+
+        if (supplierChoice == 1) {
+            addSupplier();
+        } else if (supplierChoice == 2) {
+            viewSupplierHistory();
+        } else if (supplierChoice == 3) {
+            viewSupplierWithMaxAmount();
+        } else if (supplierChoice == 4) {
+            viewSupplierWithMinAmount();
+        } else if (supplierChoice == 5) {
+            break; // Exit the loop and go back to the previous menu
+        } else {
+            cout << "Invalid choice. Please try again.\n";
+        }
           } while (true);
         } else if (supplyChoice == 2) {
           int distributionChoice;
@@ -252,6 +341,8 @@ int handleOwner(void) {
             } else {
               cout << "Invalid choice. Please try again.\n";
             }
+ // =================================================================================
+            
           } while (true);
         } else if (supplyChoice == 3) {
           break;
