@@ -83,9 +83,8 @@ int findMaxOrMinSupplier(bool isMax) {
 
 // ================================================= OWNER
 
-
-
-
+//new modified addsupplier function 
+// =================================================================================
 void addSupplier() {
   // Cek apakah daftar supplier sudah penuh
   if (supplierCount >= MAX_SUPPLIERS) {
@@ -113,6 +112,7 @@ void addSupplier() {
   supplierCount++;
   cout << "Supplier added successfully.\n";
 }
+// =================================================================================
 
 void viewSupplierHistory() {
   for (int i = 0; i < supplierCount; i++) {
